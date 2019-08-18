@@ -7,9 +7,11 @@ import NumberButton from "./NumberButton";
 //Import your array data to from the provided data file
 import {numbers} from "../../../data";
 
-const Numbers = () => {
+/*numbers is the parent component of NumberButton.js - import NumberButton.js
+  numbers is the child component of App.js - export statement at the end of this file */
+const Numbers = (props) => {
 
-  // STEP 2 - add the imported data to state
+  // STEP 2 - add the imported data to state - numbers imported from the numbers array in data.js
   const [numberState, setNumberState] = useState(numbers);
 
   return (
@@ -18,7 +20,9 @@ const Numbers = () => {
        component matching the name on the provided file. Pass
        it any props needed by the child component*/}
 
-      {numbers.map((currentValue, index) => <NumberButton key = {index} number = {currentValue } />)}
+      {numberState.map((number, index) => <NumberButton key = {index} 
+                                                        number = {number} 
+                                                        addNumber = {props.addNumber}/>)}
       
     </div>
   );
