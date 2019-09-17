@@ -27,12 +27,13 @@ function App() {
 
   const [displayValue, setDisplayValue] = useState("");
 
+  //adds the numbers selected by the user to the display
   const addNumber = (number) => {  
     
-    /*when the C button is pressed it places a blank string in displayValue. this results in an undefined value 
+    /*when the AC button is pressed it places a blank string in displayValue. this results in an undefined value 
       and calculation errors. this if statement checks for undefined and replaces the blank string with the number that
-      is entered*/
-    if((typeof displayValue === "undefined") || (displayValue === "invalid operation")) {
+      is entered. if the value detected is not undefined or an invalid operation, it is added to the display*/
+    if((typeof displayValue === "undefined") || (displayValue === "invalid operation") || (displayValue === "can't divide by zero")) {
       setDisplayValue(number);
     }
     else {
@@ -41,24 +42,29 @@ function App() {
     
   }
 
+  //adds the operators selected by the user to the display
   const addOperator = (operator) => {       
 
+    //if the equal sign is selected call the eval function to calculate operation
     if(operator === "=") {
 
+      //try...catch block checks for syntax or other errors in the eval function...for example if the user enters two 
+      //plus signs instead of one
       try {
         //setDisplayValue(displayValue => eval(displayValue));
-        eval(displayValue);     
+        eval(displayValue); //try checks the eval function for errors    
         
         //checks if the user divided by zero. a zero division returns "Infinity" to the screen
         if (eval(displayValue) === Infinity) {
           setDisplayValue("can't divide by zero");
-        }
-        else {      
-        setDisplayValue(displayValue => eval(displayValue));
+
+        }//if the try block did not return any errors or the user did not divide by zero set the results to the screen
+        else {
+        setDisplayValue(displayValue => eval(displayValue).toFixed(2));
         }
         
       }      
-      catch (error) {
+      catch (error) {//handle errors found in the try block by displaying error messages to the screen
         if(error.name === "SyntaxError" || error.name === "RangeError") {
           console.log("error catch");
           setDisplayValue("invalid operation");
@@ -75,9 +81,9 @@ function App() {
      
     }  //end if
     
-    //if another operator besides "=" was selected and the calculator returned undefined or invalid operation 
+    //if the AC button or another operator besides "=" was selected and the calculator returned undefined or invalid operation 
     //add the operator to the display instead of the words "undefined" or "invalid operation"
-    else if((typeof displayValue === "undefined") || (displayValue === "invalid operation")) {
+    else if((typeof displayValue === "undefined") || (displayValue === "invalid operation") || (displayValue === "can't divide by zero")) {
       setDisplayValue(operator);
     }
     else if (typeof displayValue !== "undefined") {
@@ -87,52 +93,45 @@ function App() {
 
   }//end addOperator
 
+  //add the special characters selected by the user to the display
   const addSpecial = (special) => {
 
+    //if the AC button is selected, clear the screen and replace the content with an empty string
     if(special === "AC") {
       setDisplayValue("");
     }   
 
+    //if the percentage sign is selected call the eval function to calculate operation
     if(special === "%") {
-
-            
+      
+      //try...catch block checks for syntax or other errors in the eval function...for example if the user enters two 
+      //plus signs instead of one
       try {
-        //setDisplayValue(displayValue => eval(displayValue));
+        
         eval(displayValue);
 
+        //checks if the result returned from calculating the percentage is not a number
         if (isNaN(eval(displayValue))){
           console.log("nan", displayValue);
           setDisplayValue = "";
-          
 
-        }
-        else {          
-      
-        setDisplayValue(displayValue => eval(displayValue)/100);
-        }
-
+        }//if the try block did not return any errors or NaN errors, divide by 100 and set the results to the screen
+        else {       
+          setDisplayValue(displayValue => eval(displayValue)/100).toFixed(2);
+        }        
         
-        
-      }  //end try    
+      }//end try    
 
-      catch (error) {
+      catch (error) {//handle errors found in the try block by displaying error messages to the screen
         if(error.name === "SyntaxError") {
-        setDisplayValue("invalid operation");
+          setDisplayValue("invalid operation");
 
         }
-        /*else {
-          setDisplayValue(displayValue => eval(displayValue)/100);
-        }*/
-
+        
       }//end catch
-
-      //setDisplayValue(displayValue => eval(displayValue)/100);
+      
     }    
-    /*else {
-     
-      setDisplayValue(displayValue => eval(displayValue));
-    }*/
-
+    
   }//end addSpecial
 
   const [numberValue, setNumberValue] = useState(0);
@@ -188,3 +187,5 @@ function App() {
 }
 
 export default App; /*child component of index.js */
+
+
