@@ -9,6 +9,7 @@ import {numbers} from "../../../data";
 
 /*numbers is the parent component of NumberButton.js - import NumberButton.js
   numbers is the child component of App.js - export statement at the end of this file */
+  
 const Numbers = (props) => {
 
   // STEP 2 - add the imported data to state - numbers imported from the numbers array in data.js
